@@ -1,0 +1,9 @@
+.main-header {
+    .avatar-image {
+        cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+        margin-left: 0 !important;
+    }
+}
