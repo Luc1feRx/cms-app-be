@@ -1,29 +1,32 @@
 <script setup>
 import Button from "primevue/button";
 import Checkbox from "primevue/checkbox";
-import InputText from "primevue/inputtext";
 import { ref } from "vue";
 import AuthLayout from "../../Layouts/AuthLayout.vue";
 import { useForm } from "vee-validate";
 import { object, string } from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
 import InputCommon from "../Components/Input/InputCommon.vue";
+import { Head, router, usePage } from "@inertiajs/vue3";
+import { useToast } from "primevue/usetoast";
+import api from "../../axios";
 // defined master layout
 defineOptions({ layout: AuthLayout });
-
+// defined props
+defineProps({ title: String });
+const page = usePage();
 const checked1 = ref(true);
+const toast = useToast();
 
 const { values, handleSubmit, defineField, errors, isSubmitting } = useForm({
     validationSchema: toTypedSchema(
         object({
-            email: string({ message: "This field is required123123" })
-                .min(1, { message: "This is required" })
-                .email({ message: "Must be a valid email" }),
+            email: string({ message: "This field is required123123" }).email({
+                message: "Must be a valid email",
+            }),
             password: string({
                 message: "This field is required123123",
-            })
-                .min(1, { message: "This is required" })
-                .min(8, { message: "Too short" }),
+            }).min(6, { message: "Too short" }),
         })
     ),
 });
@@ -31,14 +34,39 @@ const { values, handleSubmit, defineField, errors, isSubmitting } = useForm({
 const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
 
-const onSubmit = handleSubmit((values) => {
-    console.log("123123");
-
-    console.log("submit", JSON.stringify(values, null, 2));
+const onSubmit = handleSubmit(async (values) => {
+    // try {
+    //     const response = await api.post(route("admin.login.post"), values);
+    //     console.log("response.status", response.status);
+    // } catch (error) {
+    //     toast.add({
+    //         severity: "warn",
+    //         summary: "Warn Message",
+    //         detail: errors.email,
+    //         life: 3000,
+    //     });
+    //     console.error("Lỗi:", errors);
+    // }
+    router.post(route("admin.login.post"), values, {
+        onSuccess: () => {
+            console.log("Login thành công!");
+        },
+        onError: (errors) => {
+            toast.add({
+                severity: "warn",
+                summary: "Warn Message",
+                detail: errors[0],
+                life: 3000,
+            });
+            console.error("Lỗi:", errors);
+        },
+    });
 });
 </script>
 
 <template>
+    <Toast />
+    <Head :title="title" />
     <div class="bg-surface-50 dark:bg-surface-950 px-6 py-20 md:px-12 lg:px-20">
         <div
             class="bg-surface-0 dark:bg-surface-900 p-6 shadow rounded-border w-full lg:w-6/12 mx-auto"
@@ -72,7 +100,7 @@ const onSubmit = handleSubmit((values) => {
                 >
             </div>
 
-            <form @submit="onSubmit">
+            <form @submit.prevent="onSubmit">
                 <div>
                     <InputCommon
                         label="Email"

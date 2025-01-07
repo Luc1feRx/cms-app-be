@@ -7,6 +7,7 @@ const openPopover = ref(null);
 const handleAvatarClick = (event) => {
     openPopover.value.toggle(event);
 };
+
 </script>
 
 <template>
@@ -27,7 +28,7 @@ const handleAvatarClick = (event) => {
             <Popover ref="openPopover">
                 <div class="flex flex-col gap-4 w-[10rem]">
                     <div>
-                        <span class="font-medium block"
+                        <span class="font-medium block cursor-pointer"
                             >Logout</span
                         >
                         <InputGroup>
