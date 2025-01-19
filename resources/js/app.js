@@ -14,6 +14,7 @@ import ConfirmationService from "primevue/confirmationservice";
 
 import "../assets/styles.scss";
 import "../assets/tailwind.css";
+import store from "./store";
 
 createInertiaApp({
     resolve: (name) => {
@@ -37,6 +38,7 @@ createInertiaApp({
             })
             .use(ToastService)
             .use(ConfirmationService)
+            .use(store)
             .component("Toast", Toast)
             .mount(el);
     },

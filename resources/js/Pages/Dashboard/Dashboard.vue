@@ -1,9 +1,16 @@
 <script setup>
+import { usePage, Head } from "@inertiajs/vue3";
 import AppLayout from "../../Layouts/AppLayout.vue";
+import ProgressSpinner from 'primevue/progressspinner';
 
 defineOptions({ layout: AppLayout });
+
+const page = usePage();
+
 </script>
 <template>
+    <ProgressSpinner />
+    <Head :title="page.props.title" />
     <div class="bg-surface-50 dark:bg-surface-950 px-6 py-8 md:px-12 lg:px-20">
         <div class="grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-6 lg:col-span-3">

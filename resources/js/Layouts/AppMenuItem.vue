@@ -28,7 +28,6 @@ const props = defineProps({
 
 const isActiveMenu = ref(false);
 const itemKey = ref(null);
-
 onBeforeMount(() => {
     itemKey.value = props.parentItemKey
         ? props.parentItemKey + "-" + props.index
@@ -79,6 +78,7 @@ function itemClick(event, item) {
 // function checkActiveRoute(item) {
 //     return route.path === item.to;
 // }
+
 </script>
 
 <template>
@@ -94,7 +94,7 @@ function itemClick(event, item) {
         >
             {{ item.label }}
         </div>
-        <a
+        <Link
             v-if="(!item.to || item.items) && item.visible !== false"
             :href="item.url"
             @click="itemClick($event, item, index)"
@@ -108,13 +108,13 @@ function itemClick(event, item) {
                 class="pi pi-fw pi-angle-down layout-submenu-toggler"
                 v-if="item.items"
             ></i>
-        </a>
+        </Link>
         <!-- :class="[item.class, { 'active-route': checkActiveRoute(item) }]" -->
         <Link
             v-if="item.to && !item.items && item.visible !== false"
             @click="itemClick($event, item, index)"
             tabindex="0"
-            :to="item.to"
+            :href="item.to"
         >
             <i :class="item.icon" class="layout-menuitem-icon"></i>
             <span class="layout-menuitem-text">{{ item.label }}</span>

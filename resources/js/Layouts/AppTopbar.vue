@@ -2,14 +2,42 @@
 import { ref } from "vue";
 import { useLayout } from "../Layouts/composables/layout";
 import AppConfigurator from "./AppConfigurator.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
 import { Popover } from "primevue";
+import ModalCommon from "../Pages/Components/Modal/ModalCommon.vue";
+import { useStore } from "vuex";
 
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 const openPopover = ref();
+const isShowModal = ref(false);
+const store = useStore();
+const { getters } = useStore();
+
 const handleAvatarClick = (event) => {
     console.log("Avatar clicked");
     openPopover.value?.toggle(event);
+};
+
+const signOut = () => {
+    router.post(route("admin.signOut"), {
+        onSuccess: () => {
+            console.log("Logout thành công!");
+            isShowModal.value = false;
+        },
+        onError: (errors) => {
+            toast.add({
+                severity: "warn",
+                summary: "Warn Message",
+                detail: errors[0],
+                life: 3000,
+            });
+            console.error("Lỗi:", errors);
+        },
+    });
+};
+
+const closeDialog = () => {
+    isShowModal.value = false;
 };
 </script>
 
@@ -129,7 +157,8 @@ const handleAvatarClick = (event) => {
                         <div class="flex flex-col gap-4 w-[10rem]">
                             <div>
                                 <span
-                                    class="font-medium block cursor-pointer hover:bg-surface-50"
+                                    class="font-medium p-2 block cursor-pointer hover:bg-surface-50 hover:dark:bg-surface-800"
+                                    @click="isShowModal = true"
                                     >Logout</span
                                 >
                             </div>
@@ -137,6 +166,13 @@ const handleAvatarClick = (event) => {
                     </Popover>
                 </div>
             </div>
+            <ModalCommon
+                :isShow="isShowModal"
+                content="Sign out?"
+                title="Sign Out"
+                :handleConfirm="signOut"
+                :handleCancel="closeDialog"
+            />
         </div>
     </div>
 </template>

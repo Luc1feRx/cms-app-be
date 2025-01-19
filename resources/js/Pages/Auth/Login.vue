@@ -9,7 +9,6 @@ import { toTypedSchema } from "@vee-validate/zod";
 import InputCommon from "../Components/Input/InputCommon.vue";
 import { Head, router, usePage } from "@inertiajs/vue3";
 import { useToast } from "primevue/usetoast";
-import api from "../../axios";
 // defined master layout
 defineOptions({ layout: AuthLayout });
 // defined props

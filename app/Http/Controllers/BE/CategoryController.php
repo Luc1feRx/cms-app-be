@@ -3,31 +3,22 @@
 namespace App\Http\Controllers\BE;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
-class DashboardController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('Dashboard/Dashboard', [
-            'title' => 'Admin Dashboard',
+        $categories = Category::get();
+        return Inertia::render('Category/ListCategory', [
+            'title' => 'Categories Management',
+            'categories' => $categories
         ]);
-    }
-
-    public function signOut(Request $request)
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect()->route('admin.login');
     }
 
     /**
